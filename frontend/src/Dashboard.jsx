@@ -15,6 +15,7 @@ function Dashboard(props) {
       headers: { Authorization: `Bearer ${token}` },
     }).then(res => {
       const userGames = res.data.games;
+      console.log(userGames)
       setGames(userGames);
     });
   }, []);

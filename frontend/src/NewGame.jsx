@@ -20,6 +20,7 @@ function NewGame({ token }) {
       name,
       owner: localStorage.getItem('email'),
       questions: [],
+      thumbnail: '/public/thumbnail.webp',
     };
 
     const appendedGames = [...currentGames, newGame];
