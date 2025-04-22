@@ -1,9 +1,23 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout } from './util.js';
+import axios from 'axios';
 
 function Dashboard(props) {
   const navigate = useNavigate();
   const setToken = props.setfunction;
+  const [games, setGames] = useState([]);
+
+  // Fetch games on mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:5005/admin/games', {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(res => {
+      const userGames = res.data.games;
+      setGames(userGames);
+    });
+  }, []);
 
   return (
     <div className="h-screen bg-gray-100">
@@ -17,9 +31,37 @@ function Dashboard(props) {
         </button>
       </nav>
 
+      <div className="pt-20 px-6">
+        <button
+          onClick={() => navigate('/game/new')}
+          className="mb-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        >
+          + New Game
+        </button>
 
-      <div className="flex items-center justify-center h-[calc(100vh-80px)]">
-        <p className="text-lg text-gray-700">Filler</p>
+        {/* Games Container */}
+        <div className="bg-gray-200 rounded-xl shadow-inner p-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Your Games</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {games.map(game => (
+              <div
+                key={game.id}
+                onClick={() => navigate(`/game/${game.id}`)}
+                className="cursor-pointer bg-white rounded-lg shadow hover:shadow-md transition duration-200 overflow-hidden"
+              >
+                <img
+                  src={game.thumbnail}
+                  alt={game.name}
+                  className="w-full h-40 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="font-semibold text-lg text-gray-800 truncate">{game.name}</h3>
+                  <p className="text-sm text-gray-500">{game.questions?.length || 0} Questions</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

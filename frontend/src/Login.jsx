@@ -23,6 +23,7 @@ function Login(props) {
       });
       const token = res.data.token;
       localStorage.setItem('token', token);
+      localStorage.setItem('email', email);
       setToken(token);
       navigate('/dashboard');
     } catch (err) {
