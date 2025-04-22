@@ -28,9 +28,9 @@ function Register(props) {
         name,
         password,
       });
-      setToken(res.data.token)
+      setToken(res.data.token);
       localStorage.setItem('token', res.data.token);
-      navigate('/dashboard')
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed.');
     }

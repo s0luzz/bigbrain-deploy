@@ -22,8 +22,8 @@ function Login(props) {
       });
       const token = res.data.token;
       localStorage.setItem('token', token);
-      setToken(token)
-      navigate('/dashboard')
+      setToken(token);
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.error || 'Email or password is incorrect.');
     }
