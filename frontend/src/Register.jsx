@@ -11,7 +11,8 @@ function Register(props) {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
 
-  const register = async () => {
+  const register = async (e) => {
+    e.preventDefault();
     if (!email || !name || !password || !passwordConfirm) {
       setError('All fields are required.');
       return;

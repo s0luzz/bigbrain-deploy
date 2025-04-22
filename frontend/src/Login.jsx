@@ -9,7 +9,8 @@ function Login(props) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const login = async () => {
+  const login = async (e) => {
+    e.preventDefault();
     if (!email || !password) {
       setError('Email and password are required.');
       return;
