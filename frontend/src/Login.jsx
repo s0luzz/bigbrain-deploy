@@ -31,14 +31,40 @@ function Login(props) {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-50">
-      <div className="w-full max-w-md bg-white shadow-md rounded-2xl p-6">
+      <form
+        onSubmit={login}
+        className="w-full max-w-md bg-white shadow-md rounded-2xl p-6"
+      >
         <h1 className="text-2xl font-semibold text-center mb-4">Login</h1>
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <input className="w-full p-2 mb-3 border border-gray-300 rounded-lg" placeholder="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
-        <input className="w-full p-2 mb-4 border border-gray-300 rounded-lg" placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-        <button onClick={login} className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-2">Login</button>
-        <button onClick={() => navigate('/register')} className="w-full text-sm text-gray-500 hover:underline">Don't have an account? Register</button>
-      </div>
+        <input
+          className="w-full p-2 mb-3 border border-gray-300 rounded-lg"
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-2"
+        >
+          Login
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/register')}
+          className="w-full text-sm text-gray-500 hover:underline"
+        >
+          Don't have an account? Register
+        </button>
+      </form>
     </div>
   );
 }
