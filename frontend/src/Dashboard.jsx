@@ -7,7 +7,6 @@ function Dashboard(props) {
   const navigate = useNavigate();
   const setToken = props.setfunction;
   const [games, setGames] = useState([]);
-
   // Fetch games on mount
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -15,7 +14,6 @@ function Dashboard(props) {
       headers: { Authorization: `Bearer ${token}` },
     }).then(res => {
       const userGames = res.data.games;
-      console.log(userGames)
       setGames(userGames);
     });
   }, []);
