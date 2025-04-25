@@ -10,16 +10,26 @@ function PlayGame() {
   const [submitted, setSubmitted] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isCorrect, setIsCorrect] = useState(null);
+  const [lastQuestionId, setLastQuestionId] = useState(null);
 
   useEffect(() => {
     let interval;
 
-    axios.get(`http://localhost:5005/play/${playerId}/question`)
-      .then(res => {
-        const q = res.data.question;
-        setQuestion(q);
+    const fetchQuestion = () => {
+      axios.get(`http://localhost:5005/play/${playerId}/question`)
+        .then(res => {
+          const q = res.data.question;
 
-        interval = setInterval(() => {
+          if (q.id !== lastQuestionId) {
+            setQuestion(q);
+            setLastQuestionId(q.id);
+            setShowingAnswer(false);
+            setAnswers([]);
+            setSubmitted(false);
+            setSelectedAnswer('');
+            setIsCorrect(null);
+          }
+
           axios.get(`http://localhost:5005/play/${playerId}/answer`)
             .then(res => {
               const correctAnswers = res.data.answers || [];
@@ -28,24 +38,25 @@ function PlayGame() {
               if (selectedAnswer) {
                 setIsCorrect(correctAnswers.includes(selectedAnswer));
               }
-              clearInterval(interval);
             })
             .catch(err => {
               if (err.response?.data?.error !== 'Answers are not available yet') {
                 clearInterval(interval);
               }
             });
-        }, 1000);
-      });
+        });
+    };
+
+    fetchQuestion();
+    interval = setInterval(fetchQuestion, 1000);
 
     return () => clearInterval(interval);
-  }, [playerId, selectedAnswer]);
+  }, [playerId, selectedAnswer, lastQuestionId]);
 
   const submitAnswer = (answerText) => {
     axios.put(`http://localhost:5005/play/${playerId}/answer`, {
       answers: [answerText]
     }).then(() => {
-      console.log('Answer submitted:', answerText);
       setSelectedAnswer(answerText);
       setSubmitted(true);
     }).catch(err => {
