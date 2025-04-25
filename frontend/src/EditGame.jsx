@@ -26,7 +26,35 @@ function EditGame({ token }) {
     const { name, value } = e.target;
     setGame({ ...game, [name]: value });
   };
-
+  const newQuestion = () => {
+    const newQ = {
+      id: Date.now(),
+      question: '',
+      type: 'single',
+      time: 30,
+      points: 10,
+      answers: []
+    };
+    
+    // Ensure that game.questions is always an array, even if it doesn't exist
+    const currentQuestions = Array.isArray(game?.questions) ? game.questions : [];
+    const updatedQuestions = [...currentQuestions, newQ];
+    const updatedGame = { ...game, questions: updatedQuestions };
+    
+    setGame(updatedGame)
+    // Update the list of games with the modified game
+    const updatedGames = games.map(g => String(g.id) === gameId ? updatedGame : g);
+    setGames(updatedGames);
+    
+    // Send the updated games list to the server
+    axios.put('http://localhost:5005/admin/games', { games: updatedGames }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(() => {
+      navigate(`/dashboard`);
+    });
+    
+  }
+    
   const handleSave = () => {
     const updatedGames = games.map(g => String(g.id) === gameId ? game : g);
     setGames(updatedGames);
@@ -79,8 +107,16 @@ function EditGame({ token }) {
             Back to Dashboard
           </button>
         </nav>
-            <div className="mt-10 bg-gray-200 rounded-xl shadow-inner p-6">
+
+
+        <div className="relative mt-10 bg-gray-200 rounded-xl shadow-inner p-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Questions</h2>
+          <button
+            onClick={() => newQuestion()}
+            className="absolute right-6 top-4 transform px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+          >
+            New Question
+          </button>
           {!game.questions ? (
             <p className="text-gray-500 italic">No questions added yet.</p>
           ) : (

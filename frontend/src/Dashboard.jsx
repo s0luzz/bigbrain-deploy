@@ -13,8 +13,10 @@ function Dashboard(props) {
     axios.get('http://localhost:5005/admin/games', {
       headers: { Authorization: `Bearer ${token}` },
     }).then(res => {
+      console.log(res)
       const userGames = res.data.games;
       setGames(userGames);
+      console.log(userGames)
     });
   }, []);
 
