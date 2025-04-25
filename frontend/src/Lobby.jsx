@@ -3,14 +3,16 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Lobby(props) {
+  const navigate = useNavigate();
   const playerId = useParams().playerId;
+  const sessionId = useParams().sessionId;
   useEffect(() => {
     let interval;
   
       interval = setInterval(() => {
         axios.get(`http://localhost:5005/play/${playerId}/status`, {
         }).then(res => {
-          if(res.data.started) {console.log("Game started");}
+          if(res.data.started) {navigate(`/play/${sessionId}/${playerId}`)}
         });
       }, 1000);
   

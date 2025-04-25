@@ -9,7 +9,7 @@ import EditQuestion from './EditQuestion';
 import GameControls from './GameControls'; 
 import Join from './Join';
 import Lobby from './Lobby';
-
+import Play from './Play';
 
 function App() {
   const [token, setToken] = useState('');
@@ -29,6 +29,7 @@ function App() {
         <Route path="/game/new" element={token ? <NewGame setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
         <Route path="/play/:sessionId" element={<Join />}/>
         <Route path="/lobby/:sessionId/:playerId" element={<Lobby />}/>
+        <Route path="/play/:sessionId/:playerId" element={<Play />}/>
         <Route path="/game/controls/:gameId" element={token ? <GameControls setfunction={setToken} sessions={sessions} setSessions={setSessions} token={token} /> : <Navigate to="/login" />} />
       </Routes>
     </Router>

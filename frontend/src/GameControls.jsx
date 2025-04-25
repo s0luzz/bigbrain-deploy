@@ -24,7 +24,7 @@ function GameControls(props) {
       }, {
         headers: { Authorization: `Bearer ${token}` },
       }).then(() => {
-        axios.get(`http://localhost:5005/admin/session/${sid}/status`, {
+        axios.get(`http://localhost:5005/admin/session/${sessionId}/status`, {
           headers: { Authorization: `Bearer ${token}` },
         }).then(res => {
           const pos = res.data.results.position;
@@ -71,6 +71,7 @@ function GameControls(props) {
           headers: { Authorization: `Bearer ${token}` },
         }).then(res => {
           const pos = res.data.results.position;
+          console.log(res.data.results)
           if (!res.data.results.active) {
             setFinished(true);
             setPosition("Results");
