@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { logout } from './util.js';
 
+/**
+ * fetches the game and question details on component mount.
+ * updates the game and question state.
+ */
 function EditQuestion({ token, setfunction: setToken }) {
   const { gameId, questionId } = useParams();
   const navigate = useNavigate();
@@ -29,11 +33,24 @@ function EditQuestion({ token, setfunction: setToken }) {
     });
   }, [token, gameId, questionId]);
 
+  /**
+   * handles changes to the question form inputs.
+   *
+   * @param {object} e - the event object from the input change.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setQuestion(prev => ({ ...prev, [name]: value }));
   };
 
+  /**
+   * handles changes to the answers list.
+   * updates the answer text or correct status.
+   *
+   * @param {number} index - the index of the answer to update.
+   * @param {string} field - the field to update ('text' or 'isCorrect').
+   * @param {any} value - the new value for the field.
+   */
   const handleAnswerChange = (index, field, value) => {
     const updatedAnswers = [...question.answers];
     const answerText = updatedAnswers[index].text;
@@ -62,6 +79,9 @@ function EditQuestion({ token, setfunction: setToken }) {
     }
   };
 
+  /**
+   * adds a new answer to the question.
+   */
   const addAnswer = () => {
     if (question.answers.length < 6) {
       setQuestion({
@@ -71,6 +91,11 @@ function EditQuestion({ token, setfunction: setToken }) {
     }
   };
 
+  /**
+   * removes an answer from the question.
+   *
+   * @param {number} index - the index of the answer to remove.
+   */
   const removeAnswer = (index) => {
     const removedText = question.answers[index].text;
     const updatedAnswers = question.answers.filter((_, i) => i !== index);
@@ -78,9 +103,12 @@ function EditQuestion({ token, setfunction: setToken }) {
     setQuestion({ ...question, answers: updatedAnswers, correctAnswers: updatedCorrectAnswers });
   };
 
+  /**
+   * saves the updated question and navigates back to the game page.
+   */
   const handleSave = () => {
     if (!question.question.trim()) {
-      alert('Question text cannot be empty.');
+      alert('question text cannot be empty.');
       return;
     }
 
@@ -88,23 +116,23 @@ function EditQuestion({ token, setfunction: setToken }) {
     const correctAnswers = question.correctAnswers.filter(answer => filledAnswers.some(ans => ans.text === answer));
 
     if ((question.type === 'single' || question.type === 'multiple') && filledAnswers.length < 2) {
-      alert('Must provide at least two answers.');
+      alert('must provide at least two answers.');
       return;
     }
 
     if (question.type === 'single') {
       if (correctAnswers.length !== 1) {
-        alert('Single choice must have exactly one correct answer.');
+        alert('single choice must have exactly one correct answer.');
         return;
       }
     } else if (question.type === 'multiple') {
       if (correctAnswers.length < 1) {
-        alert('Multiple choice must have at least one correct answer.');
+        alert('multiple choice must have at least one correct answer.');
         return;
       }
     } else if (question.type === 'judgement') {
       if (!filledAnswers[0] || !filledAnswers[0].text.trim()) {
-        alert('Judgement answer cannot be empty.');
+        alert('judgement answer cannot be empty.');
         return;
       }
       setQuestion(prev => ({ ...prev, answers: [filledAnswers[0]], correctAnswers: [filledAnswers[0].text] }));

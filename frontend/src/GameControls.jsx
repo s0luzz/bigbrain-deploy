@@ -14,7 +14,11 @@ function GameControls(props) {
   const [position, setPosition] = useState('');
   const [sessionId, setSessionId] = useState('');
 
-
+  /**
+   * advances the game to the next question or state.
+   *
+   * @param {string} gameId - the id of the game to advance.
+   */
   const advanceGame = (gameId) => {
     axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
       mutationType: 'ADVANCE'
@@ -35,11 +39,15 @@ function GameControls(props) {
         } else {
           setPosition(`Question ${pos + 1}`);
         }
-      })
-
+      });
     });
-  }
- 
+  };
+
+  /**
+   * stops the game session for the specified game id.
+   *
+   * @param {string} gameId - the id of the game to stop.
+   */
   const stopGame = (gameId) => {
     axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
       mutationType: 'END'
@@ -48,7 +56,12 @@ function GameControls(props) {
     }).then(() => {
       setFinished(true);
     });
-  }
+  };
+
+  /**
+   * fetches the game details and session status on component mount.
+   * updates the game state and session position periodically.
+   */
   useEffect(() => {
     let interval;
   
@@ -66,7 +79,6 @@ function GameControls(props) {
           headers: { Authorization: `Bearer ${token}` },
         }).then(res => {
           const pos = res.data.results.position;
-          console.log(res.data.results)
           if (!res.data.results.active) {
             setFinished(true);
             setPosition("Results");
@@ -77,14 +89,12 @@ function GameControls(props) {
           } else {
             setPosition(`Question ${pos + 1}`);
           }
-          
         });
       }, 1000);
     });
   
     return () => clearInterval(interval);
   }, [gameId, token]);
-  
   
   return (
     <div className="h-screen bg-gray-100">
@@ -138,14 +148,8 @@ function GameControls(props) {
               <div className="text-xl font-semibold text-center text-gray-700">Game has finished</div>
             )}
           </>
-        
-        
-
-      
-
         </div>
       </div>
-
     </div>
   )
 }

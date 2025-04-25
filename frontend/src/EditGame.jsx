@@ -13,6 +13,10 @@ function EditGame(props) {
   const [games, setGames] = useState([]);
   const [game, setGame] = useState(null);
 
+  /**
+   * Fetches the list of games and sets the selected game based on the game ID.
+   * This function is called on component mount.
+   */
   useEffect(() => {
     axios.get('http://localhost:5005/admin/games', {
       headers: { Authorization: `Bearer ${token}` },
@@ -23,10 +27,19 @@ function EditGame(props) {
     });
   }, [token, gameId]);
 
+  /**
+   * Handles changes to the game details form inputs and updates the game state.
+   *
+   * @param {Object} e - The event object from the input change.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setGame({ ...game, [name]: value });
   };
+
+  /**
+   * Creates a new question, adds it to the current game, and navigates to the question editor.
+   */
   const newQuestion = () => {
     const newQ = {
       id: Date.now(),
@@ -36,22 +49,28 @@ function EditGame(props) {
       points: 10,
       answers: []
     };
-    
+
     const currentQuestions = Array.isArray(game?.questions) ? game.questions : [];
     const updatedQuestions = [...currentQuestions, newQ];
     const updatedGame = { ...game, questions: updatedQuestions };
-    
-    setGame(updatedGame)
+
+    setGame(updatedGame);
     const updatedGames = games.map(g => String(g.id) === gameId ? updatedGame : g);
     setGames(updatedGames);
-    
+
     axios.put('http://localhost:5005/admin/games', { games: updatedGames }, {
       headers: { Authorization: `Bearer ${token}` },
     }).then(() => {
       navigate(`/game/${gameId}/question/${newQ.id}`);
     });
-    
-  }
+  };
+
+  /**
+   * Deletes a question from the current game based on the question ID.
+   *
+   * @param {number} questionId - The ID of the question to delete.
+   * @returns {Function} A function to handle the deletion of the question.
+   */
   const deleteQuestion = (questionId) => () => {
     if (!game || !Array.isArray(game.questions)) return;
 
@@ -65,7 +84,12 @@ function EditGame(props) {
     axios.put('http://localhost:5005/admin/games', { games: updatedGames }, {
       headers: { Authorization: `Bearer ${token}` },
     });
-  }
+  };
+
+  /**
+   * Saves the current game details and updates the list of games.
+   * Navigates back to the dashboard after saving.
+   */
   const handleSave = () => {
     const updatedGames = games.map(g => String(g.id) === gameId ? game : g);
     setGames(updatedGames);
@@ -74,7 +98,7 @@ function EditGame(props) {
     }, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    navigate(`/dashboard`)
+    navigate(`/dashboard`);
   };
 
   if (!game) return <div className="p-6">Loading...</div>;

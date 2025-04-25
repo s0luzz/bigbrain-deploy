@@ -2,7 +2,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
-
+/**
+ * handles the join game form submission.
+ * validates the name input and sends a join request to the server.
+ * navigates to the lobby on success.
+ *
+ * @param {object} e - the event object from the form submission.
+ */
 function Join() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
@@ -12,7 +18,7 @@ function Join() {
   const handleJoin = async (e) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError('Name is required.');
+      setError('name is requred.');
       return;
     }
 
@@ -21,7 +27,8 @@ function Join() {
         res => {
           navigate(`/lobby/${sessionId}/${res.data.playerId}`)
         }
-      )} catch (err) {
+      )
+    } catch (err) {
       alert(err);
     }
   };

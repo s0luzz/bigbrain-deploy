@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from './util.js';
 import axios from 'axios';
 
-
+/**
+ * Dashboard - Description of what this function does.
+ *
+ * @param {type} paramName - Description of parameter
+ * @returns {type} Description of return value
+ */
 function Dashboard(props) {
   const navigate = useNavigate();
   const setToken = props.setfunction;
@@ -12,8 +17,12 @@ function Dashboard(props) {
   const [showLinkModal, setShowModal] = useState(false);
   const [showResultsModal, setshowResultsModal] = useState(false);
   const [sessionUrl, setSessionUrl] = useState('');
-  const token = props.token
-  // Fetch games on mount
+  const token = props.token;
+
+  /**
+   * Fetches the list of games for the logged-in user and updates the state.
+   * This function is called on component mount.
+   */
   useEffect(() => {
     axios.get('http://localhost:5005/admin/games', {
       headers: { Authorization: `Bearer ${token}` },
@@ -22,7 +31,12 @@ function Dashboard(props) {
       setGames(userGames);
     });
   }, []);
-  
+
+  /**
+   * Starts a game session for the specified game ID.
+   *
+   * @param {string} gameId - The ID of the game to start.
+   */
   const startGame = (gameId) => {
     axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
       mutationType: 'START'
@@ -41,8 +55,13 @@ function Dashboard(props) {
         setGames(userGames);
       });
     });
-  }
+  };
 
+  /**
+   * Stops a game session for the specified game ID.
+   *
+   * @param {string} gameId - The ID of the game to stop.
+   */
   const stopGame = (gameId) => {
     axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
       mutationType: 'END'
@@ -50,16 +69,15 @@ function Dashboard(props) {
       headers: { Authorization: `Bearer ${token}` },
     }).then(() => {
       setshowResultsModal(true);
-
       axios.get('http://localhost:5005/admin/games', {
         headers: { Authorization: `Bearer ${token}` },
       }).then(res => {
-        console.log(res.data.games)
+        console.log(res.data.games);
         const userGames = res.data.games;
         setGames(userGames);
       });
     });
-  }
+  };
 
   return (
     <div className="h-screen bg-gray-100">
