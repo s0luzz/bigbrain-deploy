@@ -5,7 +5,9 @@ import { logout } from './util.js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function EditGame({ token }) {
+function EditGame(props) {
+  const token = props.token;
+  const setToken = props.setfunction;
   const navigate = useNavigate();
   const { gameId } = useParams();
   const [games, setGames] = useState([]);
@@ -64,7 +66,6 @@ function EditGame({ token }) {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
-  const editQuestion = (questionId) => () => {}
   const handleSave = () => {
     const updatedGames = games.map(g => String(g.id) === gameId ? game : g);
     setGames(updatedGames);

@@ -18,9 +18,9 @@ function App() {
         <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login setfunction={setToken} />} />
         <Route path="/register" element={token ? <Navigate to="/dashboard" /> : <Register setfunction={setToken} />} />
         <Route path="/dashboard" element={token ? <Dashboard setfunction={setToken} /> : <Navigate to="/login" />} />
-        <Route path="/game/:gameId" element={token ? <EditGame token={token} /> : <Navigate to="/login" />} />
-        <Route path="/game/:gameId/question/:questionId" element={token ? <EditQuestion token={token} /> : <Navigate to="/login" />} />
-        <Route path="/game/new" element={token ? <NewGame token={token} /> : <Navigate to="/login" />} />
+        <Route path="/game/:gameId" element={token ? <EditGame setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
+        <Route path="/game/:gameId/question/:questionId" element={token ? <EditQuestion setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
+        <Route path="/game/new" element={token ? <NewGame setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,46 @@
-function EditQuestion() {
-  return (<></>)
+
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { logout } from './util.js';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+
+function EditQuestion(props) {
+  const token = props.token;
+  const setToken = props.setfunction;
+  const navigate = useNavigate();
+  const { gameId } = useParams();
+  const [games, setGames] = useState([]);
+  const [game, setGame] = useState(null);
+  const [question, setQuestion] = useState(null);
+  useEffect(() => {
+    axios.get('http://localhost:5005/admin/games', {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(res => {
+      setGames(res.data.games);
+      const selected = res.data.games.find(g => String(g.id) === gameId);
+      if (selected) setGame(selected);
+    });
+  }, [token, gameId]);
+  return (<div className="p-6 max-w-2xl mx-auto">
+      <nav className="fixed top-0 left-0 w-full bg-sky-600 text-white shadow-md z-50 h-16">
+        <h1 className="pt-4 absolute left-1/2 transform -translate-x-1/2 text-xl font-semibold text-white">BigBrain</h1>
+        <button
+          onClick={() => logout(setToken, navigate)}
+          className="absolute right-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+        >
+          Logout
+        </button>
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="absolute left-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+        >
+          Back to Dashboard
+        </button>
+      </nav>
+
+    </div>)
 }
 
 export default EditQuestion;

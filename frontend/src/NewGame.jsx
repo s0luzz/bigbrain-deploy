@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-function NewGame({ token }) {
+import { logout } from './util.js';
+function NewGame(props) {
+  const token = props.token;
+  const setToken = props.setfunction;
   const [name, setName] = useState('');
   const navigate = useNavigate();
 
