@@ -64,7 +64,7 @@ function Login(props) {
           onClick={() => navigate('/register')}
           className="w-full text-sm text-gray-500 hover:underline"
         >
-          Don't have an account? Register
+          Don&apos;t have an account? Register
         </button>
       </form>
     </div>

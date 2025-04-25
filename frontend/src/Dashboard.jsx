@@ -5,7 +5,6 @@ import axios from 'axios';
 
 
 function Dashboard(props) {
-  const sessions = props.sessions;
   const navigate = useNavigate();
   const setToken = props.setfunction;
   const setSessions = props.setsessions;
@@ -16,7 +15,6 @@ function Dashboard(props) {
   const token = props.token
   // Fetch games on mount
   useEffect(() => {
-    const sessions = props.sessions
     axios.get('http://localhost:5005/admin/games', {
       headers: { Authorization: `Bearer ${token}` },
     }).then(res => {
@@ -89,56 +87,56 @@ function Dashboard(props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {games.map(game => (
               <div
-              key={game.id}
-              onClick={() => navigate(`/game/${game.id}`)}
-              className="relative cursor-pointer bg-white rounded-lg shadow hover:shadow-md transition duration-200 overflow-hidden"
-            >
-              <img
-                src={game.thumbnail}
-                alt={game.name}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-4 flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold text-lg text-gray-800 truncate">{game.name}</h3>
-                  <p className="text-sm text-gray-500">{game.questions?.length || 0} Questions</p>
-                </div>
-                <>
-                  {!game.active ? (
-                    <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      startGame(game.id);
-                    }}
-                    className="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600"
-                  >
-                    Start Session
-                  </button>) : (
-                  <div className="flex flex-col space-y-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/game/controls/${game.id}`);
-                      }}
-                      className="bg-yellow-500 text-white px-1 py-1 text-sm rounded hover:bg-yellow-600"
-                    >
-                      Show Controls
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        stopGame(game.id);
-                      }}
-                      className="bg-red-500 text-white px-1 py-1 text-sm rounded hover:bg-red-600"
-                    >
-                      Stop Game
-                    </button>
-                    
+                key={game.id}
+                onClick={() => navigate(`/game/${game.id}`)}
+                className="relative cursor-pointer bg-white rounded-lg shadow hover:shadow-md transition duration-200 overflow-hidden"
+              >
+                <img
+                  src={game.thumbnail}
+                  alt={game.name}
+                  className="w-full h-40 object-cover"
+                />
+                <div className="p-4 flex justify-between items-center">
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-800 truncate">{game.name}</h3>
+                    <p className="text-sm text-gray-500">{game.questions?.length || 0} Questions</p>
                   </div>
-                  )}
-                </>
+                  <>
+                    {!game.active ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          startGame(game.id);
+                        }}
+                        className="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600"
+                      >
+                    Start Session
+                      </button>) : (
+                      <div className="flex flex-col space-y-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/game/controls/${game.id}`);
+                          }}
+                          className="bg-yellow-500 text-white px-1 py-1 text-sm rounded hover:bg-yellow-600"
+                        >
+                      Show Controls
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            stopGame(game.id);
+                          }}
+                          className="bg-red-500 text-white px-1 py-1 text-sm rounded hover:bg-red-600"
+                        >
+                      Stop Game
+                        </button>
+                    
+                      </div>
+                    )}
+                  </>
+                </div>
               </div>
-            </div>
             
             ))}
           </div>
@@ -178,7 +176,7 @@ function Dashboard(props) {
               value={sessionUrl}
               className="w-full mb-4 px-3 py-2 border rounded text-center text-blue-600 font-mono"
             />
-              <button
+            <button
               onClick={() => navigator.clipboard.writeText(sessionUrl)}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 m-2"
             >

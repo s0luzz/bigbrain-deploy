@@ -103,61 +103,61 @@ function EditGame(props) {
         </button>
 
       </div>
-        <nav className="fixed top-0 left-0 w-full bg-sky-600 text-white shadow-md z-50 h-16">
-          <h1 className="pt-4 absolute left-1/2 transform -translate-x-1/2 text-xl font-semibold text-white">BigBrain</h1>
-          <button
-            onClick={() => logout(setToken, navigate)}
-            className="absolute right-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
-          >
+      <nav className="fixed top-0 left-0 w-full bg-sky-600 text-white shadow-md z-50 h-16">
+        <h1 className="pt-4 absolute left-1/2 transform -translate-x-1/2 text-xl font-semibold text-white">BigBrain</h1>
+        <button
+          onClick={() => logout(setToken, navigate)}
+          className="absolute right-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+        >
             Logout
-          </button>
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="absolute left-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
-          >
+        </button>
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="absolute left-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+        >
             Back to Dashboard
-          </button>
-        </nav>
+        </button>
+      </nav>
 
 
-        <div className="relative mt-10 bg-gray-200 rounded-xl shadow-inner p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Questions</h2>
-          <button
-            onClick={() => newQuestion()}
-            className="absolute right-6 top-4 transform px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
-          >
+      <div className="relative mt-10 bg-gray-200 rounded-xl shadow-inner p-6">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Questions</h2>
+        <button
+          onClick={() => newQuestion()}
+          className="absolute right-6 top-4 transform px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+        >
             New Question
-          </button>
-          {!game.questions ? (
-            <p className="text-gray-500 italic">No questions added yet.</p>
-          ) : (
-            <ul className="space-y-3">
-              {game.questions.map((q) => (
-                <li
-                  key={q.id}
-                  className="bg-white border rounded shadow-sm p-4 flex justify-between items-center"
-                >
-                  <span className="text-gray-800">{q.question}</span>
-                  <div className="space-x-2">
-                    <button
-                      className="text-blue-600 hover:underline"
-                      onClick={() => navigate(`/game/${gameId}/question/${q.id}`)}
-                    >
+        </button>
+        {!game.questions ? (
+          <p className="text-gray-500 italic">No questions added yet.</p>
+        ) : (
+          <ul className="space-y-3">
+            {game.questions.map((q) => (
+              <li
+                key={q.id}
+                className="bg-white border rounded shadow-sm p-4 flex justify-between items-center"
+              >
+                <span className="text-gray-800">{q.question}</span>
+                <div className="space-x-2">
+                  <button
+                    className="text-blue-600 hover:underline"
+                    onClick={() => navigate(`/game/${gameId}/question/${q.id}`)}
+                  >
                       Edit
-                    </button>
-                    <button
-                      className="text-red-500 hover:underline"
-                      onClick={deleteQuestion(q.id)}
-                    >
+                  </button>
+                  <button
+                    className="text-red-500 hover:underline"
+                    onClick={deleteQuestion(q.id)}
+                  >
                       Delete
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
+    </div>
   );
 }
 

@@ -1,20 +1,20 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
-function Lobby(props) {
+function Lobby() {
   const navigate = useNavigate();
   const playerId = useParams().playerId;
   const sessionId = useParams().sessionId;
   useEffect(() => {
     let interval;
   
-      interval = setInterval(() => {
-        axios.get(`http://localhost:5005/play/${playerId}/status`, {
-        }).then(res => {
-          if(res.data.started) {navigate(`/play/${sessionId}/${playerId}`)}
-        });
-      }, 1000);
+    interval = setInterval(() => {
+      axios.get(`http://localhost:5005/play/${playerId}/status`, {
+      }).then(res => {
+        if(res.data.started) {navigate(`/play/${sessionId}/${playerId}`)}
+      });
+    }, 1000);
   
     return () => clearInterval(interval);
   }, []);

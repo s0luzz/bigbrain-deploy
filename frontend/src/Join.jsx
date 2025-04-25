@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 
-function Join(props) {
+function Join() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -21,7 +21,7 @@ function Join(props) {
         res => {
           navigate(`/lobby/${sessionId}/${res.data.playerId}`)
         }
-    )} catch (err) {
+      )} catch (err) {
       alert(err);
     }
   };

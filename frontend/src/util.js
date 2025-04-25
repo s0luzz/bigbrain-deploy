@@ -8,7 +8,7 @@ export const logout = async (setToken, navigate) => {
       },
     });
   } catch (err) {
-    console.error('Logout failed:');
+    console.error('Logout failed:', err);
   } finally {
     localStorage.removeItem('token');
     setToken(null);
