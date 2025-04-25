@@ -33,7 +33,7 @@ function Dashboard(props) {
     }).then(res => {
       const sessionId = res.data.data.sessionId;
       setSessions(prev => ({ ...prev, [gameId]: sessionId }));
-      const url = `http://localhost:5005/play/${sessionId}`;
+      const url = `http://localhost:3000/play/${sessionId}`;
       setSessionUrl(url);
       setShowModal(true);
       axios.get('http://localhost:5005/admin/games', {

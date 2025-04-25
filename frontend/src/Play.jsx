@@ -7,6 +7,9 @@ function PlayGame() {
   const [question, setQuestion] = useState(null);
   const [showingAnswer, setShowingAnswer] = useState(false);
   const [answers, setAnswers] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [isCorrect, setIsCorrect] = useState(null);
 
   useEffect(() => {
     let interval;
@@ -19,9 +22,12 @@ function PlayGame() {
         interval = setInterval(() => {
           axios.get(`http://localhost:5005/play/${playerId}/answer`)
             .then(res => {
-              setAnswers(res.data.answers || []);
-              console.log(answers)
+              const correctAnswers = res.data.answers || [];
+              setAnswers(correctAnswers);
               setShowingAnswer(true);
+              if (selectedAnswer) {
+                setIsCorrect(correctAnswers.includes(selectedAnswer));
+              }
               clearInterval(interval);
             })
             .catch(err => {
@@ -30,10 +36,23 @@ function PlayGame() {
               }
             });
         }, 1000);
-      })
+      });
 
     return () => clearInterval(interval);
-  }, [playerId]);
+  }, [playerId, selectedAnswer]);
+
+  const submitAnswer = (answerText) => {
+    axios.put(`http://localhost:5005/play/${playerId}/answer`, {
+      answers: [answerText]
+    }).then(() => {
+      console.log('Answer submitted:', answerText);
+      setSelectedAnswer(answerText);
+      setSubmitted(true);
+    }).catch(err => {
+      console.error('Failed to submit answer', err);
+    });
+  };
+
   if (!question) return <div>Loading question...</div>;
 
   return (
@@ -45,27 +64,38 @@ function PlayGame() {
       </div>
 
       {showingAnswer && (
-        <div className="m-4 relative bg-green-100 rounded-xl shadow-inner p-6">
-          <h2 className="text-xl font-semibold text-green-700">Correct Answer:</h2>
-          <ul className="list-disc ml-6 mt-2">
-            {(answers)
-              .map((ans, idx) => (
+        <>
+          <div className="m-4 relative bg-green-100 rounded-xl shadow-inner p-6">
+            <h2 className="text-xl font-semibold text-green-700">Correct Answer:</h2>
+            <ul className="list-disc ml-6 mt-2">
+              {answers.map((ans, idx) => (
                 <li key={idx} className="text-green-800 text-lg">{ans}</li>
               ))}
-          </ul>
-        </div>
+            </ul>
+          </div>
+          <div className={`text-lg text-center font-medium mt-2 ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+            You answered: {selectedAnswer} — {isCorrect ? 'Correct!' : 'Incorrect'}
+          </div>
+        </>
       )}
 
-      {!showingAnswer && (
+      {!showingAnswer && !submitted && (
         <div className="m-4 relative bg-blue-200 rounded-xl shadow-inner p-6 flex flex-col gap-4">
           {(question.answers || []).map((answer, idx) => (
             <button
               key={idx}
+              onClick={() => submitAnswer(answer.text)}
               className="px-4 py-2 rounded border transition bg-white hover:bg-blue-100"
             >
               {answer.text}
             </button>
           ))}
+        </div>
+      )}
+
+      {!showingAnswer && submitted && (
+        <div className="m-4 relative bg-yellow-100 rounded-xl shadow-inner p-6 text-center text-lg font-medium text-yellow-800">
+          Waiting for other players to answer...
         </div>
       )}
     </div>

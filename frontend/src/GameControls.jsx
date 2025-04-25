@@ -117,7 +117,7 @@ function GameControls(props) {
               <input
               type="text"
               readOnly
-              value={`http://localhost:5005/play/${sessionId}`}
+              value={`localhost:3000/play/${sessionId}`}
               className="w-full mb-4 px-3 py-2 border rounded text-center text-blue-600 font-mono"
               />
               <button
