@@ -18,22 +18,40 @@ function GameControls(props) {
   const [sessionId, setSessionId] = useState('');
 
 
-  const stopGame = (gameId) => {
+  const advanceGame = (gameId) => {
     axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
         mutationType: 'ADVANCE'
       }, {
         headers: { Authorization: `Bearer ${token}` },
       }).then(() => {
-
-        axios.get('http://localhost:5005/admin/games', {
+        axios.get(`http://localhost:5005/admin/session/${sid}/status`, {
           headers: { Authorization: `Bearer ${token}` },
         }).then(res => {
-          const userGames = res.data.games;
-          setGames(userGames);
-        });
+          const pos = res.data.results.position;
+          if (!res.data.results.active) {
+            setFinished(true);
+            setPosition("Results");
+          } else if (res.data.results.answerAvailable) {
+            setPosition(`🟩 Showing Answer (Q${res.data.results.position + 1})`);
+          } else if (pos === -1) {
+            setPosition("Lobby");
+          } else {
+            setPosition(`Question ${pos + 1}`);
+          }
+        })
+
     });
   }
-
+ 
+  const stopGame = (gameId) => {
+    axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
+        mutationType: 'END'
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then(() => {
+        setFinished(true);
+    });
+  }
   useEffect(() => {
     let interval;
   
@@ -104,7 +122,7 @@ function GameControls(props) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  stopGame(gameId)
+                  advanceGame(gameId)
                 }}
                 className="text-2xl py-4 px-8 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-200"
               >
