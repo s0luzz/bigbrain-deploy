@@ -5,11 +5,9 @@ import axios from 'axios';
 function Lobby() {
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
-      {/* Background looping video */}
       <video
         autoPlay
         loop
-        muted
         className="absolute w-full h-full object-cover"
       >
         <source src="/lobby.mp4" type="video/mp4" />
