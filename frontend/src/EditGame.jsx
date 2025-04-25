@@ -48,7 +48,7 @@ function EditGame(props) {
     axios.put('http://localhost:5005/admin/games', { games: updatedGames }, {
       headers: { Authorization: `Bearer ${token}` },
     }).then(() => {
-      navigate(`/dashboard`);
+      navigate(`/game/${gameId}/question/${newQ.id}`);
     });
     
   }
