@@ -130,8 +130,8 @@ function EditQuestion(props) {
 
         <input className="w-full p-2 border rounded"
           type="number"
-          name="time"
-          value={question.time}
+          name="duration"
+          value={question.duration}
           onChange={handleChange}
           placeholder="Time limit (seconds)"
         />

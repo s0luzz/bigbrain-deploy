@@ -32,7 +32,7 @@ function EditGame(props) {
       id: Date.now(),
       question: '',
       type: 'single',
-      time: 30,
+      duration: 30,
       points: 10,
       answers: []
     };

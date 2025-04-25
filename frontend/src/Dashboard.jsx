@@ -10,7 +10,8 @@ function Dashboard(props) {
   const setToken = props.setfunction;
   const setSessions = props.setsessions;
   const [games, setGames] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showLinkModal, setShowModal] = useState(false);
+  const [showResultsModal, setshowResultsModal] = useState(false);
   const [sessionUrl, setSessionUrl] = useState('');
   const token = props.token
   // Fetch games on mount
@@ -50,6 +51,8 @@ function Dashboard(props) {
     }, {
       headers: { Authorization: `Bearer ${token}` },
     }).then(() => {
+      setshowResultsModal(true);
+
       axios.get('http://localhost:5005/admin/games', {
         headers: { Authorization: `Bearer ${token}` },
       }).then(res => {
@@ -101,7 +104,8 @@ function Dashboard(props) {
                   <p className="text-sm text-gray-500">{game.questions?.length || 0} Questions</p>
                 </div>
                 <>
-                  {!game.active ? (<button
+                  {!game.active ? (
+                    <button
                     onClick={(e) => {
                       e.stopPropagation();
                       startGame(game.id);
@@ -114,7 +118,7 @@ function Dashboard(props) {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate(`/game/controls/${game.active}`);
+                        navigate(`/game/controls/${game.id}`);
                       }}
                       className="bg-yellow-500 text-white px-1 py-1 text-sm rounded hover:bg-yellow-600"
                     >
@@ -141,7 +145,29 @@ function Dashboard(props) {
         </div>
       </div>
 
-      {showModal && (
+
+      {showResultsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md text-center shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">Would you like to view the results?</h3>
+            <button
+              onClick={() => navigator.clipboard.writeText(sessionUrl)}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 m-2"
+            >
+              YES PLEASE 
+            </button>
+            <button
+              onClick={() => setshowResultsModal(false)}
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+
+      {showLinkModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-md text-center shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Game Session Started</h3>

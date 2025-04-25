@@ -24,7 +24,7 @@ function App() {
         <Route path="/game/:gameId" element={token ? <EditGame setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
         <Route path="/game/:gameId/question/:questionId" element={token ? <EditQuestion setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
         <Route path="/game/new" element={token ? <NewGame setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
-        <Route path="/game/controls/:sessionId" element={token ? <GameControls setfunction={setToken} token={token} /> : <Navigate to="/login" />} />
+        <Route path="/game/controls/:gameId" element={token ? <GameControls setfunction={setToken} sessions={sessions} setSessions={setSessions} token={token} /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
