@@ -19,12 +19,10 @@ function Join(props) {
     try {
       await axios.post(`http://localhost:5005/play/join/${sessionId}`, { name }).then(
         res => {
-          console.log(res.data.playerId);
+          navigate(`/lobby/${sessionId}/${res.data.playerId}`)
         }
-      )
-      alert('moving to lobby')
-    } catch (err) {
-      Alert('Unable to join session.');
+    )} catch (err) {
+      alert(err);
     }
   };
 
