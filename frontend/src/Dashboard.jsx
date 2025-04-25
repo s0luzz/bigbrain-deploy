@@ -114,7 +114,7 @@ function Dashboard(props) {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        startGame(game.id);
+                        navigate(`/game/controls/${game.active}`);
                       }}
                       className="bg-yellow-500 text-white px-1 py-1 text-sm rounded hover:bg-yellow-600"
                     >
