@@ -44,20 +44,32 @@ function Dashboard(props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {games.map(game => (
               <div
-                key={game.id}
-                onClick={() => navigate(`/game/${game.id}`)}
-                className="cursor-pointer bg-white rounded-lg shadow hover:shadow-md transition duration-200 overflow-hidden"
-              >
-                <img
-                  src={game.thumbnail}
-                  alt={game.name}
-                  className="w-full h-40 object-cover"
-                />
-                <div className="p-4">
+              key={game.id}
+              onClick={() => navigate(`/game/${game.id}`)}
+              className="relative cursor-pointer bg-white rounded-lg shadow hover:shadow-md transition duration-200 overflow-hidden"
+            >
+              <img
+                src={game.thumbnail}
+                alt={game.name}
+                className="w-full h-40 object-cover"
+              />
+              <div className="p-4 flex justify-between items-center">
+                <div>
                   <h3 className="font-semibold text-lg text-gray-800 truncate">{game.name}</h3>
                   <p className="text-sm text-gray-500">{game.questions?.length || 0} Questions</p>
                 </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alert('new session')
+                  }}
+                  className="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600"
+                >
+                  Start Session
+                </button>
               </div>
+            </div>
+            
             ))}
           </div>
         </div>
