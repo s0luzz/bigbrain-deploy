@@ -3,13 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from './util.js';
 import axios from 'axios';
 
+
 function Dashboard(props) {
+  const sessions = props.sessions;
   const navigate = useNavigate();
   const setToken = props.setfunction;
+  const setSessions = props.setsessions;
   const [games, setGames] = useState([]);
+  const token = props.token
   // Fetch games on mount
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const sessions = props.sessions
     axios.get('http://localhost:5005/admin/games', {
       headers: { Authorization: `Bearer ${token}` },
     }).then(res => {
@@ -17,6 +21,17 @@ function Dashboard(props) {
       setGames(userGames);
     });
   }, []);
+  
+  const startGame = (gameId) => {
+    axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
+      mutationType: 'START'
+    }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(res => {
+      const sessionId = res.data.data.sessionId;
+      setSessions(prev => ({ ...prev, [gameId]: sessionId }));
+    });
+  }
 
   return (
     <div className="h-screen bg-gray-100">
@@ -61,7 +76,7 @@ function Dashboard(props) {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    alert('new session')
+                    startGame(game.id);
                   }}
                   className="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600"
                 >
