@@ -14,13 +14,15 @@ import Play from './Play';
 function App() {
   const [token, setToken] = useState('');
   const [sessions, setSessions] = useState([]);
+  
   useEffect(() => {
-    setToken(localStorage.getItem('token'))
-  })
+    setToken(localStorage.getItem('token'));
+  }, []);
 
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login setfunction={setToken} />} />
         <Route path="/register" element={token ? <Navigate to="/dashboard" /> : <Register setfunction={setToken} />} />
         <Route path="/dashboard" element={token ? <Dashboard sessions={sessions} setsessions={setSessions} setfunction={setToken} token={token}/> : <Navigate to="/login" />} />
