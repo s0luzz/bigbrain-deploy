@@ -21,6 +21,7 @@ function Dashboard(props) {
     }).then(res => {
       const userGames = res.data.games;
       setGames(userGames);
+      console.log(games)
     });
   }, []);
   
@@ -35,6 +36,12 @@ function Dashboard(props) {
       const url = `http://localhost:5005/play/${sessionId}`;
       setSessionUrl(url);
       setShowModal(true);
+      axios.get('http://localhost:5005/admin/games', {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then(res => {
+        const userGames = res.data.games;
+        setGames(userGames);
+      });
     });
   }
 
@@ -78,15 +85,18 @@ function Dashboard(props) {
                   <h3 className="font-semibold text-lg text-gray-800 truncate">{game.name}</h3>
                   <p className="text-sm text-gray-500">{game.questions?.length || 0} Questions</p>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    startGame(game.id);
-                  }}
-                  className="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600"
-                >
-                  Start Session
-                </button>
+                <>
+                  {!game.active ? (<button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      startGame(game.id);
+                    }}
+                    className="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600"
+                  >
+                    Start Session
+                  </button>) : (<></>
+                  )}
+                </>
               </div>
             </div>
             
