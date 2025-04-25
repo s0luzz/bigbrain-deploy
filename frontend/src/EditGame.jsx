@@ -11,7 +11,6 @@ function EditGame({ token }) {
   const [games, setGames] = useState([]);
   const [game, setGame] = useState(null);
 
-  // Fetch games and find the one we're editing
   useEffect(() => {
     axios.get('http://localhost:5005/admin/games', {
       headers: { Authorization: `Bearer ${token}` },
@@ -36,17 +35,14 @@ function EditGame({ token }) {
       answers: []
     };
     
-    // Ensure that game.questions is always an array, even if it doesn't exist
     const currentQuestions = Array.isArray(game?.questions) ? game.questions : [];
     const updatedQuestions = [...currentQuestions, newQ];
     const updatedGame = { ...game, questions: updatedQuestions };
     
     setGame(updatedGame)
-    // Update the list of games with the modified game
     const updatedGames = games.map(g => String(g.id) === gameId ? updatedGame : g);
     setGames(updatedGames);
     
-    // Send the updated games list to the server
     axios.put('http://localhost:5005/admin/games', { games: updatedGames }, {
       headers: { Authorization: `Bearer ${token}` },
     }).then(() => {
@@ -54,7 +50,21 @@ function EditGame({ token }) {
     });
     
   }
-    
+  const deleteQuestion = (questionId) => () => {
+    if (!game || !Array.isArray(game.questions)) return;
+
+    const updatedQuestions = game.questions.filter(q => q.id !== questionId);
+    const updatedGame = { ...game, questions: updatedQuestions };
+    setGame(updatedGame);
+
+    const updatedGames = games.map(g => String(g.id) === gameId ? updatedGame : g);
+    setGames(updatedGames);
+
+    axios.put('http://localhost:5005/admin/games', { games: updatedGames }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+  const editQuestion = (questionId) => () => {}
   const handleSave = () => {
     const updatedGames = games.map(g => String(g.id) === gameId ? game : g);
     setGames(updatedGames);
@@ -130,13 +140,13 @@ function EditGame({ token }) {
                   <div className="space-x-2">
                     <button
                       className="text-blue-600 hover:underline"
-                      onClick={() => alert(`Edit Question`)}
+                      onClick={() => navigate(`/game/${gameId}/question/${q.id}`)}
                     >
                       Edit
                     </button>
                     <button
                       className="text-red-500 hover:underline"
-                      onClick={() => alert(`Delete Question`)}
+                      onClick={deleteQuestion(q.id)}
                     >
                       Delete
                     </button>
