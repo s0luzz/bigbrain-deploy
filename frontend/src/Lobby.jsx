@@ -1,8 +1,22 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Lobby() {
+function Lobby(props) {
+  const playerId = useParams().playerId;
+  useEffect(() => {
+    let interval;
+  
+      interval = setInterval(() => {
+        axios.get(`http://localhost:5005/play/${playerId}/status`, {
+        }).then(res => {
+          if(res.data.started) {console.log("Game started");}
+        });
+      }, 1000);
+  
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
       <video
