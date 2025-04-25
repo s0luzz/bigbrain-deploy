@@ -10,6 +10,8 @@ function Dashboard(props) {
   const setToken = props.setfunction;
   const setSessions = props.setsessions;
   const [games, setGames] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [sessionUrl, setSessionUrl] = useState('');
   const token = props.token
   // Fetch games on mount
   useEffect(() => {
@@ -30,6 +32,9 @@ function Dashboard(props) {
     }).then(res => {
       const sessionId = res.data.data.sessionId;
       setSessions(prev => ({ ...prev, [gameId]: sessionId }));
+      const url = `http://localhost:5005/play/${sessionId}`;
+      setSessionUrl(url);
+      setShowModal(true);
     });
   }
 
@@ -89,6 +94,33 @@ function Dashboard(props) {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md text-center shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">Game Session Started</h3>
+            <p className="mb-4 text-gray-700">Session Link:</p>
+            <input
+              type="text"
+              readOnly
+              value={sessionUrl}
+              className="w-full mb-4 px-3 py-2 border rounded text-center text-blue-600 font-mono"
+            />
+              <button
+              onClick={() => navigator.clipboard.writeText(sessionUrl)}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 m-2"
+            >
+              Copy Link
+            </button>
+            <button
+              onClick={() => setShowModal(false)}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
