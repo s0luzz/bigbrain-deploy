@@ -21,7 +21,6 @@ function Dashboard(props) {
     }).then(res => {
       const userGames = res.data.games;
       setGames(userGames);
-      console.log(games)
     });
   }, []);
   
@@ -39,6 +38,22 @@ function Dashboard(props) {
       axios.get('http://localhost:5005/admin/games', {
         headers: { Authorization: `Bearer ${token}` },
       }).then(res => {
+        const userGames = res.data.games;
+        setGames(userGames);
+      });
+    });
+  }
+
+  const stopGame = (gameId) => {
+    axios.post(`http://localhost:5005/admin/game/${gameId}/mutate`, {
+      mutationType: 'END'
+    }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(() => {
+      axios.get('http://localhost:5005/admin/games', {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then(res => {
+        console.log(res.data.games)
         const userGames = res.data.games;
         setGames(userGames);
       });
@@ -94,7 +109,28 @@ function Dashboard(props) {
                     className="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600"
                   >
                     Start Session
-                  </button>) : (<></>
+                  </button>) : (
+                  <div className="flex flex-col space-y-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startGame(game.id);
+                      }}
+                      className="bg-yellow-500 text-white px-1 py-1 text-sm rounded hover:bg-yellow-600"
+                    >
+                      Show Controls
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        stopGame(game.id);
+                      }}
+                      className="bg-red-500 text-white px-1 py-1 text-sm rounded hover:bg-red-600"
+                    >
+                      Stop Game
+                    </button>
+                    
+                  </div>
                   )}
                 </>
               </div>
