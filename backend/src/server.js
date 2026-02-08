@@ -4,8 +4,8 @@ import express from 'express';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 
-import swaggerDocument from '../swagger.json';
-import { AccessError, InputError, } from './error';
+import swaggerDocument from '../swagger.json' with { type: 'json' };
+import { AccessError, InputError } from './error.js';
 import {
   assertOwnsGame,
   assertOwnsSession,
@@ -25,7 +25,7 @@ import {
   sessionStatus,
   submitAnswers,
   updateGamesFromAdmin
-} from './service';
+} from './service.js';
 
 const app = express();
 
